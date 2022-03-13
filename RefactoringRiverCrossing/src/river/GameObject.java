@@ -9,9 +9,6 @@ public class GameObject {
     protected Location location;
     protected String sound;
 
-    public GameObject() {
-    }
-
     public GameObject(String characterName, Location startLocation) {
         name = characterName;
         location = startLocation;
