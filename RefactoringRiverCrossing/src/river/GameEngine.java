@@ -1,66 +1,40 @@
 package river;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GameEngine {
 
     public enum Item {
-        TOP, MID, BOTTOM, PLAYER;
+        WOLF, GOOSE, BEANS, FARMER;
     }
 
-    public enum Location {
-        START, FINISH, BOAT;
-    }
-
-    private GameObject top;
-    private GameObject mid;
-    private GameObject bottom;
-    private GameObject player;
+//    private GameObject wolf;
+//    private GameObject goose;
+//    private GameObject beans;
+//    private GameObject farmer;
     private Location currentLocation;
+    private Map<Item, GameObject> gameObjectMap = new HashMap<>();
+
 
     public GameEngine() {
-        top = new GameObject("Wolf", Location.START);
-        mid = new GameObject("Goose", Location.START);
-        bottom = new GameObject("Beans", Location.START);
-        player = new GameObject("Farmer", Location.START);
+        gameObjectMap.put(Item.WOLF,new GameObject("Wolf", Location.START));
+        gameObjectMap.put(Item.GOOSE,new GameObject("Goose", Location.START));
+        gameObjectMap.put(Item.BEANS,new GameObject("Beans", Location.START));
+        gameObjectMap.put(Item.FARMER,new GameObject("Farmer", Location.START));
         currentLocation = Location.START;
     }
 
     public String getName(Item id) {
-        switch (id) {
-        case TOP:
-            return top.getName();
-        case MID:
-            return mid.getName();
-        case BOTTOM:
-            return bottom.getName();
-        default:
-            return player.getName();
-        }
+        return gameObjectMap.get(id).getName();
     }
 
     public Location getLocation(Item id) {
-        switch (id) {
-        case TOP:
-            return top.getLocation();
-        case MID:
-            return mid.getLocation();
-        case BOTTOM:
-            return bottom.getLocation();
-        default:
-            return player.getLocation();
-        }
+        return gameObjectMap.get(id).getLocation();
     }
 
     public String getSound(Item id) {
-        switch (id) {
-        case TOP:
-            return top.getSound();
-        case MID:
-            return mid.getSound();
-        case BOTTOM:
-            return bottom.getSound();
-        default:
-            return player.getSound();
-        }
+        return gameObjectMap.get(id).getSound();
     }
 
     public Location getCurrentLocation() {
@@ -70,27 +44,27 @@ public class GameEngine {
     public void loadBoat(Item id) {
 
         switch (id) {
-        case TOP:
-            if (top.getLocation() == currentLocation && mid.getLocation() != Location.BOAT
-                    && bottom.getLocation() != Location.BOAT) {
-                top.setLocation(Location.BOAT);
+        case WOLF:
+            if (gameObjectMap.get(Item.WOLF).getLocation() == currentLocation && gameObjectMap.get(Item.GOOSE).getLocation() != Location.BOAT
+                    && gameObjectMap.get(Item.BEANS).getLocation() != Location.BOAT) {
+                gameObjectMap.get(Item.WOLF).setLocation(Location.BOAT);
             }
             break;
-        case MID:
-            if (mid.getLocation() == currentLocation && top.getLocation() != Location.BOAT
-                    && bottom.getLocation() != Location.BOAT) {
-                mid.setLocation(Location.BOAT);
+        case GOOSE:
+            if (gameObjectMap.get(Item.GOOSE).getLocation() == currentLocation && gameObjectMap.get(Item.WOLF).getLocation() != Location.BOAT
+                    && gameObjectMap.get(Item.BEANS).getLocation() != Location.BOAT) {
+                gameObjectMap.get(Item.GOOSE).setLocation(Location.BOAT);
             }
             break;
-        case BOTTOM:
-            if (bottom.getLocation() == currentLocation && top.getLocation() != Location.BOAT
-                    && mid.getLocation() != Location.BOAT) {
-                bottom.setLocation(Location.BOAT);
+        case BEANS:
+            if (gameObjectMap.get(Item.BEANS).getLocation() == currentLocation && gameObjectMap.get(Item.BEANS).getLocation() != Location.BOAT
+                    && gameObjectMap.get(Item.GOOSE).getLocation() != Location.BOAT) {
+                gameObjectMap.get(Item.BEANS).setLocation(Location.BOAT);
             }
             break;
-        case PLAYER:
-            if (player.getLocation() == currentLocation) {
-                player.setLocation(Location.BOAT);
+        case FARMER:
+            if (gameObjectMap.get(Item.FARMER).getLocation() == currentLocation) {
+                gameObjectMap.get(Item.FARMER).setLocation(Location.BOAT);
             }
         default: // do nothing
         }
@@ -98,24 +72,24 @@ public class GameEngine {
 
     public void unloadBoat(Item id) {
         switch (id) {
-        case TOP:
-            if (top.getLocation() == Location.BOAT) {
-                top.setLocation(currentLocation);
+        case WOLF:
+            if (gameObjectMap.get(Item.WOLF).getLocation() == Location.BOAT) {
+                gameObjectMap.get(Item.WOLF).setLocation(currentLocation);
             }
             break;
-        case MID:
-            if (mid.getLocation() == Location.BOAT) {
-                mid.setLocation(currentLocation);
+        case GOOSE:
+            if (gameObjectMap.get(Item.GOOSE).getLocation() == Location.BOAT) {
+                gameObjectMap.get(Item.GOOSE).setLocation(currentLocation);
             }
             break;
-        case BOTTOM:
-            if (bottom.getLocation() == Location.BOAT) {
-                bottom.setLocation(currentLocation);
+        case BEANS:
+            if (gameObjectMap.get(Item.BEANS).getLocation() == Location.BOAT) {
+                gameObjectMap.get(Item.BEANS).setLocation(currentLocation);
             }
             break;
-        case PLAYER:
-            if (player.getLocation() == Location.BOAT) {
-                player.setLocation(currentLocation);
+        case FARMER:
+            if (gameObjectMap.get(Item.FARMER).getLocation() == Location.BOAT) {
+                gameObjectMap.get(Item.FARMER).setLocation(currentLocation);
             }
         default: // do nothing
         }
@@ -131,34 +105,34 @@ public class GameEngine {
     }
 
     public boolean gameIsWon() {
-        return top.getLocation() == Location.FINISH && mid.getLocation() == Location.FINISH
-                && bottom.getLocation() == Location.FINISH && player.getLocation() == Location.FINISH;
+        return gameObjectMap.get(Item.WOLF).getLocation() == Location.FINISH && gameObjectMap.get(Item.GOOSE).getLocation() == Location.FINISH
+                && gameObjectMap.get(Item.BEANS).getLocation() == Location.FINISH && gameObjectMap.get(Item.FARMER).getLocation() == Location.FINISH;
     }
 
     public boolean gameIsLost() {
-        if (mid.getLocation() == Location.BOAT) {
+        if (gameObjectMap.get(Item.GOOSE).getLocation() == Location.BOAT) {
             return false;
         }
-        if (mid.getLocation() == player.getLocation()) {
+        if (gameObjectMap.get(Item.GOOSE).getLocation() == gameObjectMap.get(Item.FARMER).getLocation()) {
             return false;
         }
-        if (mid.getLocation() == currentLocation) {
+        if (gameObjectMap.get(Item.GOOSE).getLocation() == currentLocation) {
             return false;
         }
-        if (mid.getLocation() == top.getLocation()) {
+        if (gameObjectMap.get(Item.GOOSE).getLocation() == gameObjectMap.get(Item.WOLF).getLocation()) {
             return true;
         }
-        if (mid.getLocation() == bottom.getLocation()) {
+        if (gameObjectMap.get(Item.GOOSE).getLocation() == gameObjectMap.get(Item.BEANS).getLocation()) {
             return true;
         }
         return false;
     }
 
     public void resetGame() {
-        top.setLocation(Location.START);
-        mid.setLocation(Location.START);
-        bottom.setLocation(Location.START);
-        player.setLocation(Location.START);
+        gameObjectMap.get(Item.WOLF).setLocation(Location.START);
+        gameObjectMap.get(Item.GOOSE).setLocation(Location.START);
+        gameObjectMap.get(Item.BEANS).setLocation(Location.START);
+        gameObjectMap.get(Item.FARMER).setLocation(Location.START);
         currentLocation = Location.START;
     }
 
