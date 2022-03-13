@@ -7,24 +7,23 @@ public class GameObject {
 
     protected String name;
     protected Location location;
+    protected String sound;
 
     public GameObject() {
-
     }
 
     public GameObject(String characterName, Location startLocation) {
         name = characterName;
         location = startLocation;
+        if (name.equals("Wolf")) sound = "Howl";
+        else if (name.equals("Goose")) sound = "Honk";
+        else sound = "";
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    
     public Location getLocation() {
         return location;
     }
@@ -34,14 +33,8 @@ public class GameObject {
     }
 
     public String getSound() {
-        switch (name) {
-        case "Wolf":
-            return "Howl";
-        case "Goose":
-            return "Honk";
-        default:
-            return "";
-        }
+        return sound;
     }
-
 }
+
+
