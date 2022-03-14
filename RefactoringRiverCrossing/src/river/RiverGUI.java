@@ -88,21 +88,21 @@ public class RiverGUI extends JPanel implements MouseListener {
 
     public void paintObjectsOnLeft(Graphics g) {
 
-        if (engine.getLocation(Item.FARMER) == Location.START) {
+        if (engine.getItemLocation(Item.FARMER) == Location.START) {
             g.setColor(Color.MAGENTA);
             g.fillRect(80, 215, 50, 50);
         }
-        if (engine.getLocation(Item.WOLF) == Location.START) {
+        if (engine.getItemLocation(Item.WOLF) == Location.START) {
             g.setColor(Color.CYAN);
             g.fillRect(20, 215, 50, 50);
             paintStringInRectangle("W", 20, 215, 50, 50, g);
         }
-        if (engine.getLocation(Item.GOOSE) == Location.START) {
+        if (engine.getItemLocation(Item.GOOSE) == Location.START) {
             g.setColor(Color.CYAN);
             g.fillRect(20, 275, 50, 50);
             paintStringInRectangle("G", 20, 275, 50, 50, g);
         }
-        if (engine.getLocation(Item.BEANS) == Location.START) {
+        if (engine.getItemLocation(Item.BEANS) == Location.START) {
             g.setColor(Color.CYAN);
             g.fillRect(80, 275, 50, 50);
             paintStringInRectangle("B", 80, 275, 50, 50, g);
@@ -111,21 +111,21 @@ public class RiverGUI extends JPanel implements MouseListener {
 
     public void paintObjectsOnRight(Graphics g) {
 
-        if (engine.getLocation(Item.FARMER) == Location.FINISH) {
+        if (engine.getItemLocation(Item.FARMER) == Location.FINISH) {
             g.setColor(Color.MAGENTA);
             g.fillRect(730, 215, 50, 50);
         }
-        if (engine.getLocation(Item.WOLF) == Location.FINISH) {
+        if (engine.getItemLocation(Item.WOLF) == Location.FINISH) {
             g.setColor(Color.CYAN);
             g.fillRect(670, 215, 50, 50);
             paintStringInRectangle("W", 670, 215, 50, 50, g);
         }
-        if (engine.getLocation(Item.GOOSE) == Location.FINISH) {
+        if (engine.getItemLocation(Item.GOOSE) == Location.FINISH) {
             g.setColor(Color.CYAN);
             g.fillRect(670, 275, 50, 50);
             paintStringInRectangle("G", 670, 275, 50, 50, g);
         }
-        if (engine.getLocation(Item.BEANS) == Location.FINISH) {
+        if (engine.getItemLocation(Item.BEANS) == Location.FINISH) {
             g.setColor(Color.CYAN);
             g.fillRect(730, 275, 50, 50);
             paintStringInRectangle("B", 730, 275, 50, 50, g);
@@ -133,43 +133,43 @@ public class RiverGUI extends JPanel implements MouseListener {
     }
 
     public void paintObjectsOnBoat(Graphics g) {
-        if (engine.getCurrentLocation() == Location.START) {
+        if (engine.getBoatLocation() == Location.START) {
             g.setColor(Color.ORANGE);
             g.fillRect(140, 275, 110, 50);
-            if (engine.getLocation(Item.FARMER) == Location.BOAT) {
+            if (engine.getItemLocation(Item.FARMER) == Location.BOAT) {
                 g.setColor(Color.MAGENTA);
                 g.fillRect(140, 215, 50, 50);
             }
-            if (engine.getLocation(Item.WOLF) == Location.BOAT) {
+            if (engine.getItemLocation(Item.WOLF) == Location.BOAT) {
                 g.setColor(Color.CYAN);
                 g.fillRect(200, 215, 50, 50);
                 paintStringInRectangle("W", 200, 215, 50, 50, g);
-            } else if (engine.getLocation(Item.GOOSE) == Location.BOAT) {
+            } else if (engine.getItemLocation(Item.GOOSE) == Location.BOAT) {
                 g.setColor(Color.CYAN);
                 g.fillRect(200, 215, 50, 50);
                 paintStringInRectangle("G", 200, 215, 50, 50, g);
-            } else if (engine.getLocation(Item.BEANS) == Location.BOAT) {
+            } else if (engine.getItemLocation(Item.BEANS) == Location.BOAT) {
                 g.setColor(Color.CYAN);
                 g.fillRect(200, 215, 50, 50);
                 paintStringInRectangle("B", 200, 215, 50, 50, g);
             }
         }
-        if (engine.getCurrentLocation() == Location.FINISH) {
+        if (engine.getBoatLocation() == Location.FINISH) {
             g.setColor(Color.ORANGE);
             g.fillRect(550, 275, 110, 50);
-            if (engine.getLocation(Item.FARMER) == Location.BOAT) {
+            if (engine.getItemLocation(Item.FARMER) == Location.BOAT) {
                 g.setColor(Color.MAGENTA);
                 g.fillRect(550, 215, 50, 50);
             }
-            if (engine.getLocation(Item.WOLF) == Location.BOAT) {
+            if (engine.getItemLocation(Item.WOLF) == Location.BOAT) {
                 g.setColor(Color.CYAN);
                 g.fillRect(610, 215, 50, 50);
                 paintStringInRectangle("W", 610, 215, 50, 50, g);
-            } else if (engine.getLocation(Item.GOOSE) == Location.BOAT) {
+            } else if (engine.getItemLocation(Item.GOOSE) == Location.BOAT) {
                 g.setColor(Color.CYAN);
                 g.fillRect(610, 215, 50, 50);
                 paintStringInRectangle("G", 610, 215, 50, 50, g);
-            } else if (engine.getLocation(Item.BEANS) == Location.BOAT) {
+            } else if (engine.getItemLocation(Item.BEANS) == Location.BOAT) {
                 g.setColor(Color.CYAN);
                 g.fillRect(610, 215, 50, 50);
                 paintStringInRectangle("B", 610, 215, 50, 50, g);
@@ -261,71 +261,71 @@ public class RiverGUI extends JPanel implements MouseListener {
         }
 
         if (leftFarmerRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.FARMER) == Location.START) {
+            if (engine.getItemLocation(Item.FARMER) == Location.START) {
                 engine.loadBoat(Item.FARMER);
             }
         } else if (leftWolfRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.WOLF) == Location.START) {
+            if (engine.getItemLocation(Item.WOLF) == Location.START) {
                 engine.loadBoat(Item.WOLF);
             }
         } else if (leftGooseRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.GOOSE) == Location.START) {
+            if (engine.getItemLocation(Item.GOOSE) == Location.START) {
                 engine.loadBoat(Item.GOOSE);
             }
         } else if (leftBeansRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.BEANS) == Location.START) {
+            if (engine.getItemLocation(Item.BEANS) == Location.START) {
                 engine.loadBoat(Item.BEANS);
             }
         } else if (leftBoatDriverRect.contains(e.getPoint())) {
-            if (engine.getCurrentLocation() == Location.START && engine.getLocation(Item.FARMER) == Location.BOAT) {
+            if (engine.getBoatLocation() == Location.START && engine.getItemLocation(Item.FARMER) == Location.BOAT) {
                 engine.unloadBoat(Item.FARMER);
             }
         } else if (leftBoatPassengerRect.contains(e.getPoint())) {
-            if (engine.getCurrentLocation() == Location.START) {
-                if (engine.getLocation(Item.WOLF) == Location.BOAT) {
+            if (engine.getBoatLocation() == Location.START) {
+                if (engine.getItemLocation(Item.WOLF) == Location.BOAT) {
                     engine.unloadBoat(Item.WOLF);
-                } else if (engine.getLocation(Item.GOOSE) == Location.BOAT) {
+                } else if (engine.getItemLocation(Item.GOOSE) == Location.BOAT) {
                     engine.unloadBoat(Item.GOOSE);
-                } else if (engine.getLocation(Item.BEANS) == Location.BOAT) {
+                } else if (engine.getItemLocation(Item.BEANS) == Location.BOAT) {
                     engine.unloadBoat(Item.BEANS);
                 }
             }
         } else if (leftBoatRect.contains(e.getPoint())) {
-            if (engine.getCurrentLocation() == Location.START && engine.getLocation(Item.FARMER) == Location.BOAT) {
+            if (engine.getBoatLocation() == Location.START && engine.getItemLocation(Item.FARMER) == Location.BOAT) {
                 engine.rowBoat();
             }
         } else if (rightFarmerRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.FARMER) == Location.FINISH) {
+            if (engine.getItemLocation(Item.FARMER) == Location.FINISH) {
                 engine.loadBoat(Item.FARMER);
             }
         } else if (rightWolfRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.WOLF) == Location.FINISH) {
+            if (engine.getItemLocation(Item.WOLF) == Location.FINISH) {
                 engine.loadBoat(Item.WOLF);
             }
         } else if (rightGooseRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.GOOSE) == Location.FINISH) {
+            if (engine.getItemLocation(Item.GOOSE) == Location.FINISH) {
                 engine.loadBoat(Item.GOOSE);
             }
         } else if (rightBeansRect.contains(e.getPoint())) {
-            if (engine.getLocation(Item.BEANS) == Location.FINISH) {
+            if (engine.getItemLocation(Item.BEANS) == Location.FINISH) {
                 engine.loadBoat(Item.BEANS);
             }
         } else if (rightBoatDriverRect.contains(e.getPoint())) {
-            if (engine.getCurrentLocation() == Location.FINISH && engine.getLocation(Item.FARMER) == Location.BOAT) {
+            if (engine.getBoatLocation() == Location.FINISH && engine.getItemLocation(Item.FARMER) == Location.BOAT) {
                 engine.unloadBoat(Item.FARMER);
             }
         } else if (rightBoatPassengerRect.contains(e.getPoint())) {
-            if (engine.getCurrentLocation() == Location.FINISH) {
-                if (engine.getLocation(Item.WOLF) == Location.BOAT) {
+            if (engine.getBoatLocation() == Location.FINISH) {
+                if (engine.getItemLocation(Item.WOLF) == Location.BOAT) {
                     engine.unloadBoat(Item.WOLF);
-                } else if (engine.getLocation(Item.GOOSE) == Location.BOAT) {
+                } else if (engine.getItemLocation(Item.GOOSE) == Location.BOAT) {
                     engine.unloadBoat(Item.GOOSE);
-                } else if (engine.getLocation(Item.BEANS) == Location.BOAT) {
+                } else if (engine.getItemLocation(Item.BEANS) == Location.BOAT) {
                     engine.unloadBoat(Item.BEANS);
                 }
             }
         } else if (rightBoatRect.contains(e.getPoint())) {
-            if (engine.getCurrentLocation() == Location.FINISH && engine.getLocation(Item.FARMER) == Location.BOAT) {
+            if (engine.getBoatLocation() == Location.FINISH && engine.getItemLocation(Item.FARMER) == Location.BOAT) {
                 engine.rowBoat();
             }
         } else {
