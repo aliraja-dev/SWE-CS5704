@@ -16,14 +16,16 @@ public class GameEngine {
 
 
     public GameEngine() {
-        gameObjectMap.put(WOLF, new GameObject("Wolf", Location.START));
-        gameObjectMap.put(GOOSE, new GameObject("Goose", Location.START));
-        gameObjectMap.put(BEANS, new GameObject("Beans", Location.START));
-        gameObjectMap.put(FARMER, new GameObject("Farmer", Location.START));
+        gameObjectMap.put(WOLF, new GameObject("Wolf", Location.START, Color.CYAN));
+        gameObjectMap.put(GOOSE, new GameObject("Goose", Location.START, Color.CYAN));
+        gameObjectMap.put(BEANS, new GameObject("Beans", Location.START, Color.CYAN));
+        gameObjectMap.put(FARMER, new GameObject("Farmer", Location.START, Color.MAGENTA));
         boatLocation = Location.START;
     }
 
-    public String getItemName(Item id) {
+
+
+    public String getItemLabel(Item id) {
         return gameObjectMap.get(id).getLabel();
     }
 
@@ -134,4 +136,7 @@ public class GameEngine {
         boatLocation = Location.START;
     }
 
+    public int numberOfItems() {
+        return 4;
+    }
 }

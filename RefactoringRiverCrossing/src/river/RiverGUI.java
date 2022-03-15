@@ -1,5 +1,6 @@
 package river;
 
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -7,13 +8,16 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
 /**
  * Graphical interface for the River application
- * 
+ *
  * @author Seth Brown
  */
 public class RiverGUI extends JPanel implements MouseListener {
@@ -21,6 +25,21 @@ public class RiverGUI extends JPanel implements MouseListener {
     // ==========================================================
     // Fields (hotspots)
     // ==========================================================
+    private final int baseY = 275;
+    private final int boatY = 335;
+
+    private final int startBaseX = 20;
+    private final int startBoatX = 140;
+    private final int finishBoatX = 550;
+    private final int finishBaseX = 670;
+
+    private final int itemWidth = 50;
+    private final int itemHeight = 50;
+    private final int boatWidth = 110;
+    private final int boatHeight = 50;
+
+    private final Rectangle farmerRestartButtonRect = new Rectangle(290, 120, 100, 30);
+    private final Rectangle monsterRestartButtonRect = new Rectangle(410, 120, 100, 30);
 
     private final Rectangle leftFarmerRect = new Rectangle(80, 215, 50, 50);
     private final Rectangle leftWolfRect = new Rectangle(20, 215, 50, 50);
@@ -40,12 +59,21 @@ public class RiverGUI extends JPanel implements MouseListener {
 
     private final Rectangle restartButtonRect = new Rectangle(350, 120, 100, 30);
 
-    // ==========================================================
-    // Private Fields
-    // ==========================================================
+    private Map<Item, Rectangle> itemRectMap = new HashMap<>();
+    private Map<Item, Integer> itemXOffsetMap = new HashMap<>();
+    private Map<Item, Integer> itemYOffsetMap = new HashMap<>();
 
     private GameEngine engine; // Model
+    private Rectangle boatRectangle;
     private boolean restart = false;
+    private Graphics g; // Graphics object for point methods
+
+
+    private final Item[] itemInSeat = new Item[Item.values().length];
+
+    private void clearSeatAssignments() {
+        Arrays.fill(itemInSeat, null);
+    }
 
     // ==========================================================
     // Constructor
@@ -60,12 +88,29 @@ public class RiverGUI extends JPanel implements MouseListener {
     // ==========================================================
     // Paint Methods (View)
     // ==========================================================
+    private int seatsPainted = 0;
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g_arg) {
+        this.g = g_arg;
+        // Start out with no seats painted
+        seatsPainted = 0;
+
+        for (Item item : Item.values()) {
+            if(!(item.ordinal() < engine.numberOfItems())) break;
+            updateItemRectangles(item); // based on model
+        }
+        updateBoatRectangle();
 
         g.setColor(Color.GRAY);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+//        for (Item item : Item.values()) {
+//            if(!(item.ordinal() < engine.numberOfItems())) break;
+//            paintRectangle(engine.getItemColor(item), engine.getItemLabel(item), itemRectMap.get(item));
+//        }
+
+        //item.ordinal() will return the _1 for the ITEM_1
 
         paintObjectsOnLeft(g);
         paintObjectsOnRight(g);
@@ -86,8 +131,49 @@ public class RiverGUI extends JPanel implements MouseListener {
 
     }
 
-    public void paintObjectsOnLeft(Graphics g) {
+    private void updateBoatRectangle() {
+    }
 
+    private void updateItemRectangles(Item item) {
+        Rectangle updatedRectangle = new Rectangle();
+        switch (engine.getItemLocation(item)) {
+            case START:
+                updatedRectangle = getUpdatedShoreRectangle(startBaseX, item);
+                break;
+            case FINISH:
+                updatedRectangle = getUpdatedShoreRectangle(finishBaseX, item);
+                break;
+            case BOAT:
+                if(engine.getBoatLocation() == Location.START){
+                    updatedRectangle = getUpdatedShoreRectangle(startBoatX, item);
+                }
+                else{ updatedRectangle = getUpdatedShoreRectangle(finishBoatX, item);}
+                break;
+            default:
+        }
+        itemRectMap.put(item, updatedRectangle);
+
+    }
+
+    private Rectangle getUpdatedShoreRectangle(int location, Item item) {
+        itemRectMap.put(item, updatedRectangle);
+
+    }
+
+    private void paintRectangle(Color color, String str, Rectangle rect) {
+        g.setColor(color);
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+        g.setColor(Color.BLACK);
+        int fontSize = (rect.height >= 40) ? 36 : 18;
+        g.setFont(new Font("Verdana", Font.BOLD, fontSize));
+        FontMetrics fm = g.getFontMetrics();
+        int strXCoord = rect.x + rect.width / 2 - fm.stringWidth(str) / 2;
+        int strYCoord = rect.y + rect.height / 2 + fontSize / 2 - 4;
+        g.drawString(str, strXCoord, strYCoord);
+    }
+
+    public void paintObjectsOnLeft(Graphics g_arg) {
+        this.g = g_arg;
         if (engine.getItemLocation(Item.ITEM_3) == Location.START) {
             g.setColor(Color.MAGENTA);
             g.fillRect(80, 215, 50, 50);
@@ -109,7 +195,8 @@ public class RiverGUI extends JPanel implements MouseListener {
         }
     }
 
-    public void paintObjectsOnRight(Graphics g) {
+    public void paintObjectsOnRight(Graphics g_arg) {
+        this.g = g_arg;
 
         if (engine.getItemLocation(Item.ITEM_3) == Location.FINISH) {
             g.setColor(Color.MAGENTA);
@@ -170,9 +257,10 @@ public class RiverGUI extends JPanel implements MouseListener {
                 g.fillRect(610, 215, 50, 50);
                 paintStringInRectangle("G", 610, 215, 50, 50, g);
             } else if (engine.getItemLocation(Item.ITEM_0) == Location.BOAT) {
-                g.setColor(Color.CYAN);
-                g.fillRect(610, 215, 50, 50);
-                paintStringInRectangle("B", 610, 215, 50, 50, g);
+                paintRectangle(engine.getItemColor(Item.ITEM_0), engine.getItemLabel(Item.ITEM_0), itemRectMap.get(Item.ITEM_0));
+//                g.setColor(Color.CYAN);
+//                g.fillRect(610, 215, 50, 50);
+//                paintStringInRectangle("B", 610, 215, 50, 50, g);
             }
         }
     }
@@ -186,6 +274,7 @@ public class RiverGUI extends JPanel implements MouseListener {
         int strYCoord = y + height / 2 + fontSize / 2 - 4;
         g.drawString(str, strXCoord, strYCoord);
     }
+
 
     public void paintMessage(String message, Graphics g) {
         g.setColor(Color.BLACK);
