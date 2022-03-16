@@ -12,6 +12,10 @@ public class GameEngine {
     public static final Item GOOSE = Item.ITEM_1;
     public static final Item FARMER = Item.ITEM_3;
     private Location boatLocation;
+
+
+
+    private int boatPassengerCount;
     private Map<Item, GameObject> gameObjectMap = new HashMap<>();
 
 
@@ -21,6 +25,7 @@ public class GameEngine {
         gameObjectMap.put(BEANS, new GameObject("Beans", Location.START, Color.CYAN));
         gameObjectMap.put(FARMER, new GameObject("Farmer", Location.START, Color.MAGENTA));
         boatLocation = Location.START;
+        boatPassengerCount = 0;
     }
 
 
@@ -40,64 +45,30 @@ public class GameEngine {
     public Location getBoatLocation() {
         return boatLocation;
     }
+    public int getBoatPassengerCount() {
+        return boatPassengerCount;
+    }
 
     public void loadBoat(Item id) {
+        if(getItemLocation(id) != boatLocation) return; // item and boat different locales
+        if( boatPassengerCount >= 2) return; // boat passengers over capacity
+        gameObjectMap.get(id).setLocation(Location.BOAT);
+        boatPassengerCount++;
 
-        switch (id) {
-            case ITEM_2:
-                if (getItemLocation(id) == boatLocation && gameObjectMap.get(GOOSE).getLocation() != Location.BOAT
-                        && gameObjectMap.get(BEANS).getLocation() != Location.BOAT) {
-                    gameObjectMap.get(WOLF).setLocation(Location.BOAT);
-                }
-                break;
-            case ITEM_1:
-                if (getItemLocation(id) == boatLocation && gameObjectMap.get(WOLF).getLocation() != Location.BOAT
-                        && gameObjectMap.get(BEANS).getLocation() != Location.BOAT) {
-                    gameObjectMap.get(GOOSE).setLocation(Location.BOAT);
-                }
-                break;
-            case ITEM_0:
-                if (getItemLocation(id) == boatLocation && getItemLocation(id) != Location.BOAT
-                        && gameObjectMap.get(GOOSE).getLocation() != Location.BOAT) {
-                    gameObjectMap.get(BEANS).setLocation(Location.BOAT);
-                }
-                break;
-            case ITEM_3:
-                if (getItemLocation(id) == boatLocation) {
-                    gameObjectMap.get(FARMER).setLocation(Location.BOAT);
-                }
-            default: // do nothing
-        }
+
     }
 
     public void unloadBoat(Item id) {
-        switch (id) {
-            case ITEM_2:
-                if (getItemLocation(id) == Location.BOAT) {
-                    gameObjectMap.get(WOLF).setLocation(boatLocation);
-                }
-                break;
-            case ITEM_1:
-                if (getItemLocation(id) == Location.BOAT) {
-                    gameObjectMap.get(GOOSE).setLocation(boatLocation);
-                }
-                break;
-            case ITEM_0:
-                if (getItemLocation(id) == Location.BOAT) {
-                    gameObjectMap.get(BEANS).setLocation(boatLocation);
-                }
-                break;
-            case ITEM_3:
-                if (getItemLocation(id) == Location.BOAT) {
-                    gameObjectMap.get(FARMER).setLocation(boatLocation);
-                }
-            default: // do nothing
-        }
+        if (boatLocation ==  Location.START) gameObjectMap.get(id).setLocation(Location.START);
+        else if (boatLocation == Location.FINISH)gameObjectMap.get(id).setLocation(Location.FINISH);
+        boatPassengerCount--;
+
     }
 
     public void rowBoat() {
         assert (boatLocation != Location.BOAT);
-        if (boatLocation == Location.START) {
+        if(getItemLocation(FARMER) != Location.BOAT) boatLocation = getBoatLocation();
+        else if (boatLocation == Location.START) {
             boatLocation = Location.FINISH;
         } else {
             boatLocation = Location.START;
@@ -134,6 +105,7 @@ public class GameEngine {
         gameObjectMap.get(BEANS).setLocation(Location.START);
         gameObjectMap.get(FARMER).setLocation(Location.START);
         boatLocation = Location.START;
+        boatPassengerCount = 0;
     }
 
     public int numberOfItems() {
