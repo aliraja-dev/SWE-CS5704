@@ -1,26 +1,21 @@
 package river;
 
-import java.awt.Color;
+import java.awt.*;
 
-public interface GameEngine {
-
-    /**
-     * Returns the number of items in the game. That is, the number of items
-     * you need to take to the other side to win.
-     *
-     * @return the number of items in the game
-     */
-    int numberOfItems();
+abstract public class AbstractGameEngine implements GameEngine {
 
     /**
      * Returns the label of the specified item. This method may be used by a GUI
-     * (for example) to put the label string inside of a rectangle. A label is
+     * (for example) to put the label string inside a rectangle. A label is
      * typically one or two characters long.
      *
      * @param item the item with the desired label
      * @return the label of the specified item
      */
-    String getItemLabel(Item item);
+    @Override
+    public String getItemLabel(Item item) {
+        return null;
+    }
 
     /**
      * Returns the color of the specified item. This method may be used by a GUI
@@ -29,7 +24,10 @@ public interface GameEngine {
      * @param item the item with the desired color
      * @return the color of the specified item
      */
-    Color getItemColor(Item item);
+    @Override
+    public Color getItemColor(Item item) {
+        return null;
+    }
 
     /**
      * Returns the location of the specified item. The location may be START,
@@ -38,7 +36,10 @@ public interface GameEngine {
      * @param item the item with the desired location
      * @return the location of the specified item
      */
-    Location getItemLocation(Item item);
+    @Override
+    public Location getItemLocation(Item item) {
+        return null;
+    }
 
     /**
      * Changes the location of the specified item to the specified location.
@@ -46,14 +47,20 @@ public interface GameEngine {
      * @param item     whose location will be changed
      * @param location the new location of the specified item
      */
-    void setItemLocation(Item item, Location location);
+    @Override
+    public void setItemLocation(Item item, Location location) {
+
+    }
 
     /**
      * Returns the location of the boat.
      *
      * @return the location of the boat
      */
-    Location getBoatLocation();
+    @Override
+    public Location getBoatLocation() {
+        return null;
+    }
 
     /**
      * Loads the specified item onto the boat. Assuming that all the
@@ -65,7 +72,10 @@ public interface GameEngine {
      *
      * @param item the item to load onto the boat
      */
-    void loadBoat(Item item);
+    @Override
+    public void loadBoat(Item item) {
+
+    }
 
     /**
      * Unloads the specified item from the boat. If the item is on the boat
@@ -75,20 +85,29 @@ public interface GameEngine {
      *
      * @param item the item to be unloaded
      */
-    void unloadBoat(Item item);
+    @Override
+    public void unloadBoat(Item item) {
+
+    }
 
     /**
      * Rows the boat to the other shore. This method will only change the
      * location of the boat if the boat has a passenger that can drive the boat.
      */
-    void rowBoat();
+    @Override
+    public void rowBoat() {
+
+    }
 
     /**
      * True when the location of all the game items is FINISH.
      *
      * @return true if all game items of a location of FINISH, false otherwise
      */
-    boolean gameIsWon();
+    @Override
+    public boolean gameIsWon() {
+        return false;
+    }
 
     /**
      * True when one or more implementation-specific conditions are met.
@@ -99,10 +118,16 @@ public interface GameEngine {
      * @return true when one or more game-specific conditions are met, false
      * otherwise
      */
-    boolean gameIsLost();
+    @Override
+    public boolean gameIsLost() {
+        return false;
+    }
 
     /**
      * Resets the game.
      */
-    void resetGame();
+    @Override
+    public void resetGame() {
+
+    }
 }

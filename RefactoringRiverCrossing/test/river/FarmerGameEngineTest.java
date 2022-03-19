@@ -6,12 +6,12 @@ import org.junit.Test;
 
 import java.awt.*;
 
-public class GameEngineTest {
-    private GameEngine engine;
+public class FarmerGameEngineTest {
+    private FarmerGameEngine engine;
 
     @Before
     public void setUp() throws Exception {
-        engine = new GameEngine();
+        engine = new FarmerGameEngine();
     }
 
     @Test
@@ -31,13 +31,6 @@ public class GameEngineTest {
         Assert.assertEquals("Beans", engine.getItemLabel(Item.ITEM_0));
         Assert.assertEquals(Location.START, engine.getItemLocation(Item.ITEM_0));
         Assert.assertEquals(Color.CYAN, engine.getItemColor(Item.ITEM_0));
-    }
-
-    @Test
-    public void testMidTransport() {
-        Assert.assertEquals(Location.START, engine.getItemLocation(Item.ITEM_1));
-        transport(Item.ITEM_1);
-        Assert.assertEquals(Location.FINISH, engine.getItemLocation(Item.ITEM_1));
     }
 
     private void transport(Item id) {
@@ -88,7 +81,10 @@ public class GameEngineTest {
 
     @Test
     public void testLosingGame() {
+        engine.loadBoat(Item.ITEM_1);
+        Assert.assertFalse(engine.gameIsLost());
         // transport the goose
+        engine.loadBoat(Item.ITEM_3);
         transport(Item.ITEM_1);
         Assert.assertFalse(engine.gameIsLost());
         Assert.assertFalse(engine.gameIsWon());
@@ -104,6 +100,7 @@ public class GameEngineTest {
     @Test
     public void testError() {
         // transport the goose
+        engine.loadBoat(Item.ITEM_3);
         transport(Item.ITEM_1);
         Assert.assertFalse(engine.gameIsLost());
         Assert.assertFalse(engine.gameIsWon());
@@ -123,5 +120,26 @@ public class GameEngineTest {
         Assert.assertEquals(midLoc, engine.getItemLocation(Item.ITEM_1));
         Assert.assertEquals(bottomLoc, engine.getItemLocation(Item.ITEM_0));
         Assert.assertEquals(playerLoc, engine.getItemLocation(Item.ITEM_3));
+    }
+
+    @Test
+    public void testRestGame() {
+        engine.loadBoat(Item.ITEM_2);
+        Assert.assertTrue(engine.getItemLocation(Item.ITEM_2) == Location.BOAT);
+        engine.resetGame();
+        Assert.assertTrue(engine.getItemLocation(Item.ITEM_2) == Location.START);
+    }
+
+    @Test
+    public void testLeftOver() {
+        Assert.assertTrue(engine.getBoatLocation() == Location.START);
+        Assert.assertTrue(engine.numberOfItems() == 4);
+        engine.setItemLocation(Item.ITEM_2, Location.BOAT);
+        Assert.assertTrue(engine.getItemLocation(Item.ITEM_2) == Location.BOAT);
+        engine.setItemLocation(Item.ITEM_0, Location.FINISH);
+        engine.setItemLocation(Item.ITEM_1, Location.FINISH);
+        Assert.assertTrue(engine.gameIsLost());
+
+
     }
 }
