@@ -48,16 +48,22 @@ public class FarmerGameEngine extends AbstractGameEngine {
     public void loadBoat(Item id) {
         if (getItemLocation(id) != boatLocation) return; // item and boat different locales
         if (boatPassengerCount >= 2) return; // boat passengers over capacity
-        gameObjectMap.get(id).setLocation(Location.BOAT);
+        setItemLocation(id, Location.BOAT);
         boatPassengerCount++;
     }
 
     @Override
     public void unloadBoat(Item id) {
-        if (boatLocation == Location.START) gameObjectMap.get(id).setLocation(Location.START);
+        if (boatLocation == Location.START) setItemLocation(id, Location.START);
         else if (boatLocation == Location.FINISH) gameObjectMap.get(id).setLocation(Location.FINISH);
         boatPassengerCount--;
     }
+
+    @Override
+    public void setItemLocation(Item item, Location location) {
+        gameObjectMap.get(item).setLocation(location);
+    }
+
 
     @Override
     public void rowBoat() {

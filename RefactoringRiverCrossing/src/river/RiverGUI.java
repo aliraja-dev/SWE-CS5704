@@ -87,24 +87,20 @@ public class RiverGUI extends JPanel implements MouseListener {
             seat2Passenger = null;
             seat1Passenger = null;
         }
-
     }
 
     private void paintBoat() {
         int boatWidth = 110;
         int boatHeight = 50;
         int boatY = 335;
-        switch (engine.getBoatLocation()) {
-            case START -> {
-                g.setColor(Color.ORANGE);
-                g.fillRect(startBoatX, boatY, boatWidth, boatHeight);
-                boatRectangle.setBounds(startBoatX, boatY, boatWidth, boatHeight);
-            }
-            case FINISH -> {
-                g.setColor(Color.ORANGE);
-                g.fillRect(finishBoatX, boatY, boatWidth, boatHeight);
-                boatRectangle.setBounds(finishBoatX, boatY, boatWidth, boatHeight);
-            }
+        if (engine.getBoatLocation() == Location.START) {
+            g.setColor(Color.ORANGE);
+            g.fillRect(startBoatX, boatY, boatWidth, boatHeight);
+            boatRectangle.setBounds(startBoatX, boatY, boatWidth, boatHeight);
+        } else if (engine.getBoatLocation() == Location.FINISH) {
+            g.setColor(Color.ORANGE);
+            g.fillRect(finishBoatX, boatY, boatWidth, boatHeight);
+            boatRectangle.setBounds(finishBoatX, boatY, boatWidth, boatHeight);
         }
     }
 

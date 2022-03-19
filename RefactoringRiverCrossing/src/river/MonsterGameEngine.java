@@ -7,10 +7,6 @@ import java.util.Map;
 public class MonsterGameEngine extends AbstractGameEngine {
     private Location boatLocation;
     private int boatPassengerCount;
-    private int munchkinStartCount;
-    private int munchkinFinishCount;
-    private int monsterStartCount;
-    private int monsterFinishCount;
 
     private Map<Item, GameObject> gameObjectMap = new HashMap<>();
 
@@ -18,10 +14,6 @@ public class MonsterGameEngine extends AbstractGameEngine {
         addObjectsToMap();
         boatLocation = Location.START;
         boatPassengerCount = 0;
-        monsterStartCount = 0;
-        monsterFinishCount = 0;
-        munchkinFinishCount = 0;
-        munchkinStartCount = 0;
     }
 
     private void addObjectsToMap() {
@@ -58,15 +50,20 @@ public class MonsterGameEngine extends AbstractGameEngine {
     public void loadBoat(Item id) {
         if (getItemLocation(id) != boatLocation) return; // item and boat different locales
         if (boatPassengerCount >= 2) return; // boat passengers over capacity
-        gameObjectMap.get(id).setLocation(Location.BOAT);
+        setItemLocation(id, Location.BOAT);
         boatPassengerCount++;
     }
 
     @Override
     public void unloadBoat(Item id) {
-        if (boatLocation == Location.START) gameObjectMap.get(id).setLocation(Location.START);
+        if (boatLocation == Location.START) setItemLocation(id, Location.START);
         else if (boatLocation == Location.FINISH) gameObjectMap.get(id).setLocation(Location.FINISH);
         boatPassengerCount--;
+    }
+
+    @Override
+    public void setItemLocation(Item item, Location location) {
+        gameObjectMap.get(item).setLocation(location);
     }
 
     @Override
@@ -90,48 +87,71 @@ public class MonsterGameEngine extends AbstractGameEngine {
         return true;
     }
 
-    private void countMunchkins() {
-        for (Item item : Item.values()) {
-            if (item.ordinal() % 2 == 0) {
-                // do nothing since this is a monster
-            } else if (getItemLocation(item) == Location.START) {
-                munchkinStartCount++;
-                if (munchkinFinishCount > 0) {
-                    munchkinFinishCount--;
-                }
-            } else if (getItemLocation(item) == Location.FINISH) {
-                munchkinFinishCount++;
-                munchkinStartCount--;
-            }
-        }
-    }
-
-    private void countMonsters() {
+    public int monstersOnLeftShore() {
+        int monsterStartCount = 0;
         for (Item item : Item.values()) {
             if (item.ordinal() % 2 == 1) {
-                // do nothing since this is a munchkin
-            } else if (getItemLocation(item) == Location.START) {
+                // do nothing
+            } else if (Location.START == getItemLocation(item) && monsterStartCount <= 3) {
                 monsterStartCount++;
-                if (monsterFinishCount > 0) {
-                    monsterFinishCount--;
-                }
-            } else if (getItemLocation(item) == Location.FINISH) {
-                monsterFinishCount++;
-                monsterStartCount--;
+
+            } else if (getItemLocation(item) == Location.BOAT && boatLocation == Location.START) {
+                monsterStartCount++;
             }
         }
+        return monsterStartCount;
     }
+
+    public int monstersOnRightShore() {
+        int monsterFinishCount = 0;
+        for (Item item : Item.values()) {
+            if (item.ordinal() % 2 == 1) {
+                // do nothing
+            } else if (Location.FINISH == getItemLocation(item) && monsterFinishCount <= 3) {
+                monsterFinishCount++;
+
+            } else if (getItemLocation(item) == Location.BOAT && boatLocation == Location.FINISH) {
+                monsterFinishCount++;
+            }
+        }
+        return monsterFinishCount;
+    }
+
+    public int munchkinsOnLeftShore() {
+        int munchkinStartCount = 0;
+        for (Item item : Item.values()) {
+            if (item.ordinal() % 2 == 0) {
+                // do nothing
+            } else if (Location.START == getItemLocation(item) && munchkinStartCount <= 3) {
+                munchkinStartCount++;
+
+            } else if (getItemLocation(item) == Location.BOAT && boatLocation == Location.START) {
+                munchkinStartCount++;
+            }
+        }
+        return munchkinStartCount;
+    }
+
+    public int munchkinsOnRightShore() {
+        int munchkinFinishCount = 0;
+        for (Item item : Item.values()) {
+            if (item.ordinal() % 2 == 0) {
+                // do nothing
+            } else if (Location.FINISH == getItemLocation(item) && munchkinFinishCount <= 3) {
+                munchkinFinishCount++;
+
+            } else if (getItemLocation(item) == Location.BOAT && boatLocation == Location.FINISH) {
+                munchkinFinishCount++;
+            }
+        }
+        return munchkinFinishCount;
+    }
+
 
     @Override
     public boolean gameIsLost() {
-        countMonsters();
-        countMunchkins();
-        if (monsterStartCount > munchkinStartCount && munchkinStartCount > 0 && boatLocation != Location.START) {
-            return true;
-        }
-        if (monsterFinishCount > munchkinFinishCount && munchkinFinishCount > 0) {
-            return true;
-        }
+        if (monstersOnLeftShore() > munchkinsOnLeftShore() && munchkinsOnLeftShore() > 0) return true;
+        if (monstersOnRightShore() > munchkinsOnRightShore() && munchkinsOnRightShore() > 0) return true;
         return false;
     }
 
@@ -140,10 +160,6 @@ public class MonsterGameEngine extends AbstractGameEngine {
         addObjectsToMap();
         boatLocation = Location.START;
         boatPassengerCount = 0;
-        monsterStartCount = 0;
-        monsterFinishCount = 0;
-        munchkinFinishCount = 0;
-        munchkinStartCount = 0;
     }
 
     @Override

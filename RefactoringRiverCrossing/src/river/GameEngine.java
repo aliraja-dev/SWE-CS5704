@@ -43,7 +43,7 @@ public interface GameEngine {
     /**
      * Changes the location of the specified item to the specified location.
      *
-     * @param item whose location will be changed
+     * @param item     whose location will be changed
      * @param location the new location of the specified item
      */
     void setItemLocation(Item item, Location location);
